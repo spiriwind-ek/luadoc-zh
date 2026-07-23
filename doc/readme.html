@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Lua 5.5 说明</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="lua.css">
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=utf-8">
+<STYLE TYPE="text/css">
+blockquote, .display {
+	border: solid #a0a0a0 2px ;
+	border-radius: 8px ;
+	padding: 1em ;
+	margin: 0px ;
+}
+
+.display {
+	word-spacing: 0.25em ;
+}
+
+dl.display dd {
+	padding-bottom: 0.2em ;
+}
+
+tt, kbd, code {
+	font-size: 12pt ;
+}
+</STYLE>
+</HEAD>
+
+<BODY>
+
+<H1>
+<A HREF="https://www.lua.org/"><IMG SRC="logo.png" ALT="Lua"></A>
+欢迎使用 Lua 5.5
+</H1>
+
+<DIV CLASS="menubar">
+<A HREF="#about">关于</A>
+&middot;
+<A HREF="#install">安装</A>
+&middot;
+<A HREF="#changes">变更</A>
+&middot;
+<A HREF="#license">许可证</A>
+&middot;
+<A HREF="contents.html">参考手册</A>
+</DIV>
+
+<H2><A NAME="about">关于 Lua</A></H2>
+<P>
+Lua 是一种功能强大、高效、轻量级的嵌入式脚本语言，
+由
+<A HREF="https://www.lua.org/authors.html">团队</A>
+在
+<A HREF="https://www.puc-rio.br/">PUC-Rio</A>
+（巴西里约热内卢天主教大学）开发。
+Lua 是
+<A HREF="#license">自由软件</A>，
+被全球
+<A HREF="https://www.lua.org/uses.html">众多产品和项目</A>使用。
+
+<P>
+Lua 的
+<A HREF="https://www.lua.org/">官方网站</A>
+提供关于 Lua 的完整信息，
+包括
+<A HREF="https://www.lua.org/about.html">概要介绍</A>、
+<A HREF="https://www.lua.org/start.html">入门指南</A>
+以及
+<A HREF="https://www.lua.org/docs.html">最新文档</A>，
+特别是
+<A HREF="https://www.lua.org/manual/5.5/">参考手册</A>，
+它可能与本发行版中的
+<A HREF="contents.html">本地副本</A>略有不同。
+
+<H2><A NAME="install">安装 Lua</A></H2>
+<P>
+Lua 以
+<A HREF="https://www.lua.org/ftp/">源代码</A>形式发行。
+你需要在使用前构建它。
+构建 Lua 应该很简单，
+因为 Lua 是用纯 ISO C 实现的，
+可以在所有已知拥有 ISO C 编译器的平台上不加修改地编译。
+Lua 也可以不加修改地作为 C++ 编译。
+下面给出的构建 Lua 的说明适用于类 Unix 平台，
+如 Linux 和 macOS。
+另请参见
+<A HREF="#other">其他系统的说明</A>和
+<A HREF="#customization">自定义选项</A>。
+
+<P>
+如果你没有时间或意愿自己编译 Lua，
+可以从
+<A HREF="https://luabinaries.sourceforge.net">LuaBinaries</A>获取二进制文件。
+
+<H3>构建 Lua</H3>
+<P>
+在大多数常见的类 Unix 平台上，只需执行 "<KBD>make</KBD>"。
+以下是详细步骤。
+
+<OL>
+<LI>
+打开终端窗口并移动到
+名为 <TT>lua-5.5.0</TT> 的顶级目录。
+那里的 <TT>Makefile</TT> 控制构建过程和安装过程。
+<P>
+<LI>
+  执行 "<KBD>make</KBD>"。<TT>Makefile</TT> 将猜测你的平台并为它构建 Lua。
+<P>
+<LI>
+  如果猜测失败，执行 "<KBD>make help</KBD>" 查看你的平台是否列出。
+  目前支持的平台有：
+<P>
+<P CLASS="display">
+   guess aix bsd c89 freebsd generic ios linux macosx mingw posix solaris
+</P>
+<P>
+  如果你的平台列出了，只需执行 "<KBD>make xxx</KBD>"，其中 xxx
+  是你的平台名称。
+<P>
+  如果你的平台未列出，尝试最接近的一个或 posix、generic、
+  c89，按此顺序。
+<P>
+<LI>
+编译只需片刻，
+并在 <TT>src</TT> 目录中生成三个文件：
+lua（解释器）、
+luac（编译器）
+和 liblua.a（库）。
+<P>
+<LI>
+  要检查 Lua 是否正确构建，构建后执行 "<KBD>make test</KBD>"
+  。这将运行解释器并打印其版本。
+</OL>
+<P>
+
+<H3>安装 Lua</H3>
+<P>
+  一旦你构建了 Lua，你可能想将其安装到系统的官方位置。
+  在这种情况下，执行 "<KBD>make install</KBD>"。官方位置和安装文件的方式在 <TT>Makefile</TT> 中定义。你可能需要适当的权限来安装文件，因此可能需要执行 "<KBD>sudo make install</KBD>"。
+
+<P>
+  要一步构建并安装 Lua，执行 "<KBD>make all install</KBD>"，
+  或 "<KBD>make xxx install</KBD>"，
+  其中 xxx 是你的平台名称。
+
+<P>
+  要在构建后本地安装 Lua，执行 "<KBD>make local</KBD>"。
+  这将创建一个 <TT>install</TT> 目录，包含子目录
+  <TT>bin</TT>、<TT>include</TT>、<TT>lib</TT>、<TT>man</TT>、<TT>share</TT>，
+  并按如下方式安装 Lua。
+
+  要本地安装 Lua，但在其他目录中，执行
+  "<KBD>make install INSTALL_TOP=xxx</KBD>"，其中 xxx 是你选择的目录。
+  安装从 <TT>src</TT> 和 <TT>doc</TT> 目录开始，
+  因此如果 <TT>INSTALL_TOP</TT> 不是绝对路径，请注意。
+
+<DL CLASS="display">
+<DT>
+    bin:
+<DD>
+    lua luac
+<DT>
+    include:
+<DD>
+    lua.h luaconf.h lualib.h lauxlib.h lua.hpp
+<DT>
+    lib:
+<DD>
+    liblua.a
+<DT>
+    man/man1:
+<DD>
+    lua.1 luac.1
+</DL>
+
+<P>
+  这些是你开发所需的唯一目录。
+  如果你只想运行 Lua 程序，
+  你只需要 <TT>bin</TT> 和 <TT>man</TT> 中的文件。
+  <TT>include</TT> 和 <TT>lib</TT> 中的文件用于
+  将 Lua 嵌入 C 或 C++ 程序。
+
+<H3><A NAME="customization">自定义</A></H3>
+<P>
+  三种事物可以通过编辑文件来定制：
+<UL>
+    <LI> 在何处以及如何安装 Lua &mdash; 编辑 <TT>Makefile</TT>。
+    <LI> 如何构建 Lua &mdash; 编辑 <TT>src/Makefile</TT>。
+    <LI> Lua 功能 &mdash; 编辑 <TT>src/luaconf.h</TT>。
+</UL>
+
+<P>
+  你实际上不需要编辑 Makefile，因为你可以在调用 make 时在命令行设置相关变量。
+  但是，最好编辑并保存 Makefile 以记录你所做的更改。
+
+<P>
+  另一方面，如果你需要自定义某些 Lua 功能，
+  请在构建和安装 Lua 之前编辑 <TT>src/luaconf.h</TT>。
+  编辑后的文件将是安装的文件，
+  它将被你构建的任何 Lua 客户端使用，以确保一致性。
+  专家可以通过编辑 Lua 源代码进行进一步的自定义。
+
+<H3><A NAME="other">在其他系统上构建 Lua</A></H3>
+<P>
+  如果你不使用通常的 Unix 工具，则构建 Lua 的说明取决于你使用的编译器。你需要为构建库、解释器和编译器创建项目（或你的编译器使用的任何内容），如下所示：
+
+<DL CLASS="display">
+<DT>
+库:
+<DD>
+lapi.c lcode.c lctype.c ldebug.c ldo.c ldump.c lfunc.c lgc.c llex.c lmem.c lobject.c lopcodes.c lparser.c lstate.c lstring.c ltable.c ltm.c lundump.c lvm.c lzio.c
+lauxlib.c lbaselib.c lcorolib.c ldblib.c liolib.c lmathlib.c loadlib.c loslib.c lstrlib.c ltablib.c lutf8lib.c linit.c
+<DT>
+解释器:
+<DD>
+  库, lua.c
+<DT>
+编译器:
+<DD>
+  库, luac.c
+</DL>
+
+<P>
+  要在自己的程序中将 Lua 作为库使用，你需要知道如何
+  使用编译器创建和使用库。此外，要动态加载
+  Lua 的 C 库，你需要知道如何创建动态库，
+  并确保这些动态库可以访问 Lua API 函数
+  &mdash; 但<EM>不要</EM>将 Lua 库链接到每个动态库中。
+  对于 Unix，我们建议将 Lua 库静态链接到宿主程序中，
+  并为其符号导出以用于动态链接；
+  <TT>src/Makefile</TT> 为 Lua 解释器执行此操作。
+  对于 Windows，我们建议 Lua 库为 DLL。
+  在所有情况下，编译器 luac 都应静态链接。
+
+<P>
+  如上所述，你可以在构建 Lua 之前编辑 <TT>src/luaconf.h</TT> 以自定义某些功能。
+
+<H2><A NAME="changes">自 Lua 5.4 以来的变更</A></H2>
+<P>
+以下是 Lua 5.5 中引入的主要变更。
+<A HREF="contents.html">参考手册</A>列出了
+<A HREF="manual.html#8">不兼容性</A>。
+
+<H3>主要变更</H3>
+<UL>
+<LI> 全局变量声明
+<LI> for 循环变量为只读
+<LI> 浮点数以足够精度的十进制打印，以便正确读回
+<LI> 构造器更多层级
+<LI> table.create
+<LI> utf8.offset 也返回字符的最终位置
+<LI> 外部字符串（使用 Lua 不管理的内存）
+<LI> 新函数 luaL_openselectedlibs 和 luaL_makeseed
+<LI> 主要垃圾回收增量执行
+<LI> 更紧凑的数组（大数组内存使用减少约 60%）
+<LI> lua.c 动态加载 'readline'
+<LI> 静态（固定）二进制文件（在内存中加载二进制代码块时，Lua 可以在某些内部结构中重用其原始内存）
+<LI> dump 和 undump 重用所有字符串
+<LI> 辅助缓冲区在创建最终字符串时重用缓冲区
+</UL>
+
+<H2><A NAME="license">许可证</A></H2>
+<P>
+<A HREF="https://opensource.org/osd">
+<IMG SRC="OSIApproved.png" ALIGN="right" ALT="[Open Source Initiative Approved License]" STYLE="padding-left: 1em" WIDTH=50>
+</A>
+Lua 是在
+<A HREF="https://opensource.org/license/mit">MIT 许可证</A>条款下发行的自由软件，
+许可证如下；
+它可以用于任何目的，包括商业目的，
+完全免费，无需向我们询问。
+
+唯一的要求是，如果你确实使用了 Lua，
+你应该通过在产品或其文档中的适当位置包含版权声明来给予我们信用。
+
+有关详细信息，请参见
+<A HREF="https://www.lua.org/license.html">许可证页面</A>。
+
+<BLOCKQUOTE STYLE="padding-bottom: 0em">
+Copyright &copy; 1994&ndash;2025 Lua.org, PUC-Rio.
+
+<P>
+特此免费授予任何获得此软件副本的人及其相关文档文件（"软件"）的许可，不受限制地处理软件，包括但不限于使用、复制、修改、合并、发布、分发、再许可和/或出售软件副本的权利，并允许向软件提供的人这样做，但须满足以下条件：
+
+<P>
+上述版权声明和本许可声明应包含在软件的所有副本或实质性部分中。
+
+<P>
+软件按"原样"提供，不附带任何明示或暗示的保证，包括但不限于适销性保证、特定用途适用性保证和非侵权保证。在任何情况下，作者或版权持有人均不对任何索赔、损害或其他责任负责，无论是在合同诉讼、侵权诉讼还是其他诉讼中，或与软件或软件的使用或其他交易有关。
+</BLOCKQUOTE>
+<P>
+
+<P CLASS="footer">
+最后更新：
+2025年12月10日
+</P>
+<!--
+Last change: revised for Lua 5.5.0
+-->
+
+</BODY>
+</HTML>

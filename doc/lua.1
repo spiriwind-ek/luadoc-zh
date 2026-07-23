@@ -1,0 +1,151 @@
+.\" $Id: lua.man,v 1.14 2024/03/18 06:57:32 lhf Exp $
+.TH LUA 1 "$Date: 2024/03/18 06:57:32 $"
+.SH NAME
+lua \- Lua 解释器
+.SH SYNOPSIS
+.B lua
+[
+.I options
+]
+[
+.I script
+[
+.I args
+]
+]
+.SH DESCRIPTION
+.B lua
+是独立的 Lua 解释器。
+它加载并执行 Lua 程序，
+可以是文本源代码形式，
+也可以是预编译的二进制形式。
+（预编译的二进制文件由
+.BR luac
+（Lua 编译器）输出。）
+.B lua
+既可以用作批处理解释器，也可以交互使用。
+.LP
+处理完
+.I options
+后，
+.I script
+文件中的 Lua 程序被加载并执行。
+.I args
+作为字符串在名为
+.B arg
+的全局表中提供给
+.I script
+，同时也作为其主函数的参数。
+在不带参数调用时，
+.B lua
+在标准输入是终端时的行为相当于
+.BR "lua \-v \-i" ,
+否则相当于
+.BR "lua \-" .
+.LP
+在交互模式下，
+.B lua
+提示用户，
+从标准输入读取行，
+并在读取时执行它们。
+如果该行包含表达式，
+则计算该行并打印结果。
+如果该行不包含完整的语句，
+则显示辅助提示符并读取行，
+直到形成完整的语句或发现语法错误。
+.LP
+在处理命令行选项和脚本之前，
+.B lua
+按顺序检查环境变量
+.B LUA_INIT_5_5
+和
+.B LUA_INIT
+的内容。
+如果内容的格式为
+.RI '@ filename ',
+则执行
+.I filename
+。
+否则，假定内容为 Lua 语句并执行。
+当定义了
+.B LUA_INIT_5_5
+时，
+.B LUA_INIT
+被忽略。
+.SH OPTIONS
+.TP
+.BI \-e " stat"
+执行语句
+.IR stat .
+.TP
+.B \-i
+执行
+.I script
+后进入交互模式。
+.TP
+.BI \-l " mod"
+将库
+.I mod
+require 到全局变量
+.IR mod .
+.TP
+.BI \-l " g=mod"
+将库
+.I mod
+require 到全局变量
+.IR g .
+.TP
+.B \-v
+显示版本信息。
+.TP
+.B \-E
+忽略环境变量。
+.TP
+.B \-W
+开启警告。
+.TP
+.B \-\-
+停止处理选项。
+.TP
+.B \-
+停止处理选项并将标准输入作为文件执行。
+.SH ENVIRONMENT VARIABLES
+以下环境变量影响
+.B lua
+的执行。
+当定义时，
+特定版本的变量优先，
+非版本变量被忽略。
+.TP
+.B LUA_INIT, LUA_INIT_5_5
+在命令行选项和脚本之前执行的代码。
+.TP
+.B LUA_PATH, LUA_PATH_5_5
+package.path 的初始值，
+即 require 用于搜索 Lua 加载器的路径。
+.TP
+.B LUA_CPATH, LUA_CPATH_5_5
+package.cpath 的初始值，
+即 require 用于搜索 C 加载器的路径。
+.SH EXIT STATUS
+如果脚本调用 os.exit，
+则
+.B lua
+以给定的退出状态退出。
+否则，
+.B lua
+在没有错误时以 EXIT_SUCCESS（POSIX 系统上为 0）退出，
+在有错误时以 EXIT_FAILURE（POSIX 系统上为 1）退出。
+交互模式中引发的错误不会导致退出。
+.SH DIAGNOSTICS
+错误消息应该是自解释的。
+.SH "SEE ALSO"
+.BR luac (1)
+.br
+lua.org 上的文档，
+特别是参考手册的第 7 节。
+.SH AUTHORS
+R. Ierusalimschy,
+L. H. de Figueiredo,
+W. Celes
+.\" EOF
